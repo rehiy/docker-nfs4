@@ -1,1 +1,8 @@
-/mnt *(rw,fsid=0,root_squash,no_subtree_check,insecure)
+# /etc/exports
+#
+# use exportfs -arv to reread
+
+/nfs *(fsid=0,ro,sync,no_root_squash,no_subtree_check)
+
+/nfs/share-1 *(rw,sync,no_root_squash,no_subtree_check)
+/nfs/share-2 *(rw,sync,no_root_squash,no_subtree_check)
