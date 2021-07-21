@@ -1,41 +1,27 @@
 # NFS v4 Server Container
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/joebiellik/nfs4.svg)](https://hub.docker.com/r/joebiellik/nfs4/)
-[![Docker Stars](https://img.shields.io/docker/stars/joebiellik/nfs4.svg)](https://hub.docker.com/r/joebiellik/nfs4/)
-[![Docker Build](https://img.shields.io/docker/automated/joebiellik/nfs4.svg)](https://hub.docker.com/r/joebiellik/nfs4/)
-[![Docker Build Status](https://img.shields.io/docker/build/joebiellik/nfs4.svg)](https://hub.docker.com/r/joebiellik/nfs4/)
-
 [NFS v4](http://nfs.sourceforge.net/) server running under [s6 overlay](https://github.com/just-containers/s6-overlay) on [Alpine Linux](https://hub.docker.com/_/alpine/).
 
 ## Configuration
 
-See [example directory](https://github.com/jcbiellikltd/docker-nfs4/tree/master/example) for sample config file.
+See [example directory](https://github.com/rehiy/docker-nfs4/tree/master/example) for sample config file.
 
 ## Quickstart
 
-```yml
-nfs4:
-  image: joebiellik/nfs4
-
-  # Required to load kernel NFS module
-  privileged: true
-
-  volumes:
-    # You must provide an exports config file
-    - ./exports:/etc/exports
-
-    # Shares
-    - /mnt:/mnt
-
-  ports:
-    - "111:111/tcp"
-    - "111:111/udp"
-    - "2049:2049/tcp"
-    - "2049:2049/udp"
+```
+docker run --name nfs4 -d \
+    --cap-add SYS_ADMIN \
+    --publish 2049:2049 \
+    --publish 2049:2049/udp \
+    --volume /mnt/nfs-root:/nfs \
+    --volume /mnt/share-1:/nfs/share-1 \
+    --volume /mnt/share-2:/nfs/share-2 \
+    --volume ./exports.txt:/etc/exports \
+    vmlu/nfs4
 ```
 
 ### Mounting
 
 ```shell
-mount -t nfs4 localhost:/ ./nfs
+mount.nfs4 localhost:/share-1 /tmp/nfs
 ```
